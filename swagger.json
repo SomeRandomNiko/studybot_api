@@ -1,0 +1,433 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "studybot api",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080",
+            "description": "Local server"
+        },
+        {
+            "url": "https://api.studybot.it",
+            "description": "Live server"
+        }
+    ],
+    "components": {
+        "schemas": {
+            "user": {
+                "type": "object",
+                "properties": {
+                    "discord": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "username": {
+                                "type": "string"
+                            },
+                            "avatarUrl": {
+                                "type": "string"
+                            },
+                            "discriminator": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "digreg": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "number"
+                            },
+                            "firstName": {
+                                "type": "string"
+                            },
+                            "lastName": {
+                                "type": "string"
+                            },
+                            "fullName": {
+                                "type": "string"
+                            },
+                            "classId": {
+                                "type": "number"
+                            },
+                            "className": {
+                                "type": "string"
+                            },
+                            "role": {
+                                "type": "string"
+                            },
+                            "isOver18": {
+                                "type": "boolean"
+                            }
+                        }
+                    }
+                }
+            },
+            "grade": {
+                "type": "object",
+                "properties": {
+                    "grade": {
+                        "type": "number"
+                    },
+                    "weight": {
+                        "type": "number"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "full-date"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                }
+            },
+            "studyTimer": {
+                "type": "object",
+                "properties": {
+                    "studyTime": {
+                        "type": "number"
+                    },
+                    "breakTime": {
+                        "type": "number"
+                    }
+                }
+            },
+            "todoItem": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "done": {
+                        "type": "boolean"
+                    },
+                    "dueDate": {
+                        "type": "string",
+                        "format": "full-date"
+                    }
+                }
+            }
+        }
+    },
+    "paths": {
+        "/user/me": {
+            "get": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Get information about the logged in user",
+                "description": "Get information about the logged in user",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/user"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not logged in"
+                    }
+                }
+            }
+        },
+        "/digreg/grades": {
+            "get": {
+                "tags": [
+                    "digreg"
+                ],
+                "summary": "Get grades for the logged in user",
+                "description": "Get grades for the logged in user",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/grade"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not logged in"
+                    },
+                    "403": {
+                        "description": "Digreg not connected"
+                    }
+                }
+            }
+        },
+        "/timer": {
+            "get": {
+                "tags": [
+                    "timer"
+                ],
+                "summary": "Get the current study timer",
+                "description": "Get the current study timer",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/studyTimer"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not logged in"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "timer"
+                ],
+                "summary": "Set the current study timer",
+                "description": "Set the current study timer",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/studyTimer"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/studyTimer"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not logged in"
+                    }
+                }
+            }
+        },
+        "/todo": {
+            "post": {
+                "tags": [
+                    "todo"
+                ],
+                "summary": "Create a new todo item",
+                "description": "Create a new todo item",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/todoItem"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/todoItem"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not logged in"
+                    }
+                }
+            }
+        },
+        "/todo/all": {
+            "get": {
+                "tags": [
+                    "todo"
+                ],
+                "summary": "Get all todo items",
+                "description": "Get all todo items",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/todoItem"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not logged in"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "todo"
+                ],
+                "summary": "Delete all todo items",
+                "description": "Delete all todo items",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Not logged in"
+                    }
+                }
+            }
+        },
+        "/todo/{id}": {
+            "get": {
+                "tags": [
+                    "todo"
+                ],
+                "summary": "Get a todo item",
+                "description": "Get a todo item",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The id of the todo item",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/todoItem"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not logged in"
+                    },
+                    "404": {
+                        "description": "Todo item not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "todo"
+                ],
+                "summary": "Update a todo item",
+                "description": "Update a todo item",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The id of the todo item",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/todoItem"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/todoItem"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not logged in"
+                    },
+                    "404": {
+                        "description": "Todo item not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "todo"
+                ],
+                "summary": "Delete a todo item",
+                "description": "Delete a todo item",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The id of the todo item",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/todoItem"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not logged in"
+                    }
+                }
+            }
+        }
+    }
+}
