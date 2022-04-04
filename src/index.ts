@@ -7,6 +7,7 @@ import { errorHandler } from './middleware';
 import loginRouter from './routes/loginRouter';
 import authRouter from './routes/authRouter';
 import userRouter from './routes/userRouter';
+import digregRouter from './routes/digregRouter';
 
 const swaggerDocument = require('../swagger.json');
 
@@ -22,6 +23,7 @@ database.connect().then(() => console.log('Connected to database')).catch(consol
 app.use("/login", loginRouter);
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
+app.use("/digreg", digregRouter);
 
 app.use(errorHandler);
 
