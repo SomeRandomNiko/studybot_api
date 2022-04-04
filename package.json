@@ -1,7 +1,7 @@
 {
-  "name": "studybot_webserver",
+  "name": "studybot_api",
   "version": "1.0.0",
-  "description": "The reworked backend server for studybot",
+  "description": "The Api Server for studybot",
   "main": "./dist/index.js",
   "scripts": {
     "dev": "ts-node-dev ./src/index.ts",
