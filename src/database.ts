@@ -1,47 +1,48 @@
 import mongoose, { ObjectId } from "mongoose";
 import config from "./config";
 
-type User = {
-    discordId: string,
-    discordAccessToken: string,
-    discordRefreshToken: string,
-    discordTokenExpires: Date,
-    digregConnected: boolean,
-    digregId?: number,
-    digregAccessToken?: string,
-    digregRefreshToken?: string,
-    digregTokenExpires?: Date,
-    todoList: TodoItem[],
-    studyTimer: StudyTimer,
-    _id?: string
+export namespace DB {
+    export type User = {
+        discordId: string,
+        discordAccessToken: string,
+        discordRefreshToken: string,
+        discordTokenExpires: Date,
+        digregConnected: boolean,
+        digregId?: number,
+        digregAccessToken?: string,
+        digregRefreshToken?: string,
+        digregTokenExpires?: Date,
+        todoList: TodoItem[],
+        studyTimer: StudyTimer,
+    }
+
+    export type TodoItem = {
+        title: string,
+        description?: string,
+        done: boolean,
+        dueDate?: Date,
+    }
+
+    export type StudyTimer = {
+        studyTime: number,
+        breakTime: number,
+    }
 }
 
-type TodoItem = {
-    title: string,
-    description?: string,
-    done: boolean,
-    dueDate?: Date
-    _id?: ObjectId
-}
 
-type StudyTimer = {
-    studyTime: number,
-    breakTime: number
-}
-
-const StudyTimerSchema = new mongoose.Schema<StudyTimer>({
+const StudyTimerSchema = new mongoose.Schema<DB.StudyTimer>({
     studyTime: { type: Number, default: 0 },
-    breakTime: { type: Number, default: 0 }
+    breakTime: { type: Number, default: 0 },
 })
 
-const TodoListSchema = new mongoose.Schema<TodoItem>({
+const TodoListSchema = new mongoose.Schema<DB.TodoItem>({
     title: { type: String, required: true },
     description: { type: String, required: false },
     done: { type: Boolean, required: true, default: false },
     dueDate: { type: Date, required: false }
 })
 
-const UserSchema = new mongoose.Schema<User>({
+const UserSchema = new mongoose.Schema<DB.User>({
     discordId: { type: String, required: true, unique: true },
     discordAccessToken: { type: String, required: true },
     discordRefreshToken: { type: String, required: true },
@@ -55,7 +56,7 @@ const UserSchema = new mongoose.Schema<User>({
     studyTimer: { type: StudyTimerSchema, default: { breakTime: 0, studyTime: 0 } },
 })
 
-const UserModel = mongoose.model<User>("user", UserSchema);
+const UserModel = mongoose.model<DB.User>("user", UserSchema);
 
 export function connect() {
     return mongoose.connect(config.mongodbURI);
@@ -99,7 +100,7 @@ export function setDigregTokens(discordId: string, digregAccessToken: string, di
 
     if (!digregId)
         delete data.digregId;
-        
+
     return UserModel.updateOne({ discordId: discordId }, data);
 }
 
@@ -113,7 +114,7 @@ export function disconnectDigreg(discordId: string) {
     });
 }
 
-export function addTodoItem(discordId: string, todoItem: TodoItem) {
+export function addTodoItem(discordId: string, todoItem: DB.TodoItem) {
     return UserModel.updateOne({ discordId: discordId }, {
         $push: { todoList: todoItem }
     });
@@ -125,13 +126,13 @@ export function removeTodoItem(discordId: string, todoItemId: ObjectId) {
     });
 }
 
-export function updateTodoItem(discordId: string, todoItemId: ObjectId, todoItem: TodoItem) {
+export function updateTodoItem(discordId: string, todoItemId: ObjectId, todoItem: DB.TodoItem) {
     return UserModel.updateOne({ discordId: discordId, "todoList._id": todoItemId }, {
         $set: { "todoList.$": todoItem }
     });
 }
 
-export function setStudyTimer(discordId: string, studyTimer: StudyTimer) {
+export function setStudyTimer(discordId: string, studyTimer: DB.StudyTimer) {
     return UserModel.updateOne({ discordId: discordId }, {
         $set: { studyTimer: studyTimer }
     });

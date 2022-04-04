@@ -129,6 +129,11 @@
             }
         }
     },
+    "security": [
+        {
+            "bearerAuth": []
+        }
+    ],
     "paths": {
         "/user/me": {
             "get": {
@@ -137,11 +142,6 @@
                 ],
                 "summary": "Get information about the logged in user",
                 "description": "Get information about the logged in user",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Success",
@@ -437,6 +437,44 @@
                     },
                     "401": {
                         "description": "Not logged in"
+                    }
+                }
+            }
+        },
+        "/auth/linkDigreg": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Link a digreg account to a discord account",
+                "description": "Link a digreg account to a discord account",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "digregToken": {
+                                        "type": "string",
+                                        "required": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Invalid digregToken"
+                    },
+                    "401": {
+                        "description": "Not logged in"
+                    },
+                    "500": {
+                        "description": "Server error"
                     }
                 }
             }
