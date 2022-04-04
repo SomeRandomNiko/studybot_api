@@ -16,12 +16,6 @@ export async function refreshDigregTokens(user: DB.User) {
     return response.data;
 }
 
-export async function getDigregOAuthTokens(code: string) {
-    return new Promise<DigregApi.Token>((resolve, reject) => {
-        axiosInstance.post("/token", { code }, { headers: { "API-SECRET": config.digregClientSecret } }).then(response => resolve(response.data)).catch(reject);
-    })
-}
-
 export async function getDigregUserData(access_token: string) {
     return new Promise<DigregApi.User>((resolve, reject) => {
         axiosInstance.get("/user/me", {
