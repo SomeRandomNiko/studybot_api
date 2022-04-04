@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import config from "../config";
-import { createUser, getUser, setDigregTokens, setDiscordTokens } from "../database";
+import { createUser, disconnectDigreg, getUser, setDigregTokens, setDiscordTokens } from "../database";
 import { getDiscordOAuthTokens, getDiscordUserData } from "../discord";
 import jwt from "jsonwebtoken";
 import { AxiosError } from "axios";
@@ -12,6 +12,7 @@ const authRouter = express.Router();
 authRouter.get("/discord", discordOAuthCallback);
 authRouter.get("/digreg", digregOAuthCallback);
 authRouter.post("/linkDigreg", requireLogin, linkDigreg);
+authRouter.post("/unlinkDigreg", requireLogin, unlinkDigreg);
 
 async function discordOAuthCallback(req: Request, res: Response, next: NextFunction) {
     const code = req.query.code?.toString();
@@ -75,6 +76,11 @@ async function linkDigreg(req: Request, res: Response, next: NextFunction) {
 
         res.sendStatus(200);
     });
+}
+
+async function unlinkDigreg(req: Request, res: Response, next: NextFunction) {
+    await disconnectDigreg(req.discordId).catch(() => next({ status: 500, message: "Could not disconnect digreg" }));
+    res.sendStatus(200);
 }
 
 export default authRouter;

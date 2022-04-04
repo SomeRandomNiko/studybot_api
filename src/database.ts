@@ -107,10 +107,10 @@ export function setDigregTokens(discordId: string, digregAccessToken: string, di
 export function disconnectDigreg(discordId: string) {
     return UserModel.updateOne({ discordId: discordId }, {
         digregConnected: false,
-        digregId: undefined,
-        digregAccessToken: undefined,
-        digregRefreshToken: undefined,
-        digregTokenExpires: undefined
+        digregId: null,
+        digregAccessToken: null,
+        digregRefreshToken: null,
+        digregTokenExpires: null
     });
 }
 

@@ -6,13 +6,14 @@ import * as database from './database';
 import { errorHandler } from './middleware';
 import loginRouter from './routes/loginRouter';
 import authRouter from './routes/authRouter';
+import userRouter from './routes/userRouter';
 
 const swaggerDocument = require('../swagger.json');
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors())
+app.use(cors({ origin: "*"}));
 
 // Setup swagger api documentation
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
@@ -20,6 +21,7 @@ database.connect().then(() => console.log('Connected to database')).catch(consol
 
 app.use("/login", loginRouter);
 app.use("/auth", authRouter);
+app.use("/user", userRouter);
 
 app.use(errorHandler);
 

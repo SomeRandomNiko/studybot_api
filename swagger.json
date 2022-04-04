@@ -478,6 +478,26 @@
                     }
                 }
             }
+        },
+        "/auth/unlinkDigreg": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Unlink a digreg account from a discord account",
+                "description": "Unlink a digreg account from a discord account",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Not logged in"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
         }
     }
 }

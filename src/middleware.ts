@@ -33,43 +33,59 @@ export function requireLogin(req: Request, res: Response, next: NextFunction) {
     });
 }
 
-export async function requireDiscord(req: Request, res: Response, next: NextFunction) {
+export async function discord(req: Request, res: Response, next: NextFunction) {
     if (!req.discordId)
-    return next({ status: 500, message: 'Middleware requireDiscord requires requireLogin before it' });
+        return next({ status: 500, message: 'Middleware requireDiscord requires requireLogin before it' });
 
     const user = await database.getUser(req.discordId);
     if (!user)
         return next({ status: 404, message: 'User not found' });
 
-    if(user.discordTokenExpires && user.discordTokenExpires.getTime() < Date.now()) {
+    let accessToken = user.discordAccessToken;
+
+    if (user.discordTokenExpires && user.discordTokenExpires.getTime() < Date.now()) {
         const newTokens = await refreshDiscordTokens(user);
         if (!newTokens)
             return next({ status: 500, message: 'Failed to refresh Discord tokens' });
 
         await database.setDiscordTokens(user.discordId, newTokens.access_token, newTokens.refresh_token, new Date(Date.now() + newTokens.expires_in * 1000));
+
+        accessToken = newTokens.access_token;
     }
+
+    req.discordAccessToken = accessToken;
+
     next();
 }
 
-export async function requireDigreg(req: Request, res: Response, next: NextFunction) {
-    if (!req.discordId)
-        return next({ status: 500, message: 'Middleware requreDigreg requires requireLogin before it' });
+export function digreg(optional = false) {
+    return async function (req: Request, res: Response, next: NextFunction) {
+        if (!req.discordId)
+            return next({ status: 500, message: 'Middleware requreDigreg requires requireLogin before it' });
 
-    const user = await database.getUser(req.discordId);
-    if (!user)
-        return next({ status: 404, message: 'User not found' });
+        const user = await database.getUser(req.discordId);
+        if (!user)
+            return next({ status: 404, message: 'User not found' });
 
-    if (!user.digregConnected)
-        return next({ status: 403, message: 'User is not connected to digreg' });
+        if (!user.digregConnected)
+            return next(optional ? undefined : { status: 403, message: 'User is not connected to digreg' });
+
+        let accessToken = user.digregAccessToken;
 
 
-    // If the digreg token is expired, refresh it
-    if (user.digregTokenExpires && user.digregTokenExpires.getTime() < Date.now()) {
-        const newTokens = await refreshDigregTokens(user);
-        if (!newTokens)
-            return next({ status: 500, message: 'Failed to refresh digreg tokens' });
+        // If the digreg token is expired, refresh it
+        if (user.digregTokenExpires && user.digregTokenExpires.getTime() < Date.now()) {
+            const newTokens = await refreshDigregTokens(user);
+            if (!newTokens)
+                return next({ status: 500, message: 'Failed to refresh digreg tokens' });
 
-        await database.setDigregTokens(user.discordId, newTokens.token, new Date(newTokens.expiration));
+            await database.setDigregTokens(user.discordId, newTokens.token, new Date(newTokens.expiration));
+
+            accessToken = newTokens.token;
+        }
+
+        req.digregAccessToken = accessToken || "";
+
+        next();
     }
-    next();
 }
