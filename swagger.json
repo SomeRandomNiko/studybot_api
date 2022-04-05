@@ -209,6 +209,9 @@
                     },
                     "401": {
                         "description": "Not logged in"
+                    },
+                    "404": {
+                        "description": "Could not get timer from database"
                     }
                 }
             },
@@ -229,17 +232,13 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/studyTimer"
-                                }
-                            }
-                        }
+                        "description": "Success"
                     },
                     "401": {
                         "description": "Not logged in"
+                    },
+                    "400": {
+                        "description": "No StudyTimer object in request body"
                     }
                 }
             }
