@@ -7,6 +7,7 @@ import { errorHandler } from './middleware';
 import userRouter from './routes/userRouter';
 import digregRouter from './routes/digregRouter';
 import timerRouter from './routes/timerRouter';
+import todoRouter from './routes/todoRouter';
 
 const swaggerDocument = require('../swagger.json');
 
@@ -22,6 +23,7 @@ database.connect().then(() => console.log('Connected to database')).catch(consol
 app.use("/user", userRouter);
 app.use("/digreg", digregRouter);
 app.use("/timer", timerRouter);
+app.use("/todo", todoRouter);
 
 app.get("/", (req: Request, res: Response) => res.send("studybot api server"));
 

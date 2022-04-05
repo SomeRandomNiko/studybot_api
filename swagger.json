@@ -261,20 +261,13 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/todoItem"
-                                    }
-                                }
-                            }
-                        }
+                        "description": "Success"
                     },
                     "401": {
                         "description": "Not logged in"
+                    },
+                    "400": {
+                        "description": "No TodoItem object in request body"
                     }
                 }
             }
@@ -355,6 +348,9 @@
                     },
                     "404": {
                         "description": "Todo item not found"
+                    },
+                    "400": {
+                        "description": "No id provided"
                     }
                 }
             },
@@ -386,20 +382,13 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/todoItem"
-                                }
-                            }
-                        }
+                        "description": "Success"
                     },
                     "401": {
                         "description": "Not logged in"
                     },
-                    "404": {
-                        "description": "Todo item not found"
+                    "400": {
+                        "description": "No id provided or no TodoItem object in request body"
                     }
                 }
             },
@@ -422,20 +411,13 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/todoItem"
-                                    }
-                                }
-                            }
-                        }
+                        "description": "Success"
                     },
                     "401": {
                         "description": "Not logged in"
+                    },
+                    "400": {
+                        "description": "No id provided"
                     }
                 }
             }
