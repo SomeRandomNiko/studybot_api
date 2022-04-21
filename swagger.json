@@ -155,6 +155,9 @@
                     },
                     "401": {
                         "description": "Not logged in"
+                    },
+                    "404": {
+                        "description": "User not found"
                     }
                 }
             }
