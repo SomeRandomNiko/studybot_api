@@ -27,7 +27,7 @@ function userTransformer(discordUser: APIUser, digregUser?: any) {
             id: discordUser.id,
             username: discordUser.username,
             discriminator: discordUser.discriminator,
-            avatarUrl: `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png`,
+            avatarUrl: discordUser.avatar ? `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png` : `https://cdn.discordapp.com/embed/avatars/${discordUser.discriminator}.png`,
         }
     }
 
