@@ -1,8 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
-import config from './config';
+import config from './shared/config';
 import swaggerUi from 'swagger-ui-express';
-import * as database from './database';
+import * as database from './shared/database';
 import { errorHandler } from './middleware';
 import userRouter from './routes/userRouter';
 import digregRouter from './routes/digregRouter';
@@ -30,6 +30,6 @@ app.get("/", (req: Request, res: Response) => res.send("studybot api server"));
 app.use(errorHandler);
 
 // Start server
-app.listen(config.port, () => {
-    console.log(`Server is running on port ${config.port}`);
+app.listen(config.apiServerPort, () => {
+    console.log(`Server is running on port ${config.apiServerPort}`);
 });

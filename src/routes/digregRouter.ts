@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
 import express, { NextFunction, Request, Response } from "express";
-import config from "../config";
-import { DigregApi, getDigregGrades } from "../digreg";
+import config from "../shared/config";
+import { DigregApi, getDigregGrades } from "../shared/digreg";
 import { digreg, requireLogin } from "../middleware";
 
 const digregRouter = express.Router();

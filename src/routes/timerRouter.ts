@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import { getStudyTimer, setStudyTimer } from "../database";
+import { getStudyTimer, setStudyTimer } from "../shared/database";
 import { requireLogin } from "../middleware";
 
 const timerRouter = express.Router();

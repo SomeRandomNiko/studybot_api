@@ -1,8 +1,8 @@
 import { APIUser } from "discord-api-types/v10";
 import express, { Request, Response } from "express";
-import config from "../config";
-import { getDigregUserData } from "../digreg";
-import { getDiscordUserData } from "../discord";
+import config from "../shared/config";
+import { getDigregUserData } from "../shared/digreg";
+import { getDiscordUserData } from "../shared/discord";
 import { digreg, discord, requireLogin } from "../middleware";
 
 const userRouter = express.Router();

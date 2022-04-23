@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import config from './config';
-import * as database from './database';
-import { refreshDigregTokens } from './digreg';
-import { refreshDiscordTokens } from './discord';
+import config from './shared/config';
+import * as database from './shared/database';
+import { refreshDigregTokens } from './shared/digreg';
+import { refreshDiscordTokens } from './shared/discord';
 
 interface ErrorResponse {
     message: string;

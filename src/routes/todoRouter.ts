@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import { addTodoItem, deleteAllTodoItems, getStudyTimer, getTodoItem, getTodoList, removeTodoItem, setStudyTimer, updateTodoItem } from "../database";
+import { addTodoItem, deleteAllTodoItems, getStudyTimer, getTodoItem, getTodoList, removeTodoItem, setStudyTimer, updateTodoItem } from "../shared/database";
 import { requireLogin } from "../middleware";
 
 const todoRouter = express.Router();
