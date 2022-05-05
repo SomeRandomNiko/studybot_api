@@ -1,6 +1,5 @@
 import { APIUser } from "discord-api-types/v10";
-import express, { Request, Response } from "express";
-import config from "../shared/config";
+import express, { NextFunction, Request, Response } from "express";
 import { getDigregUserData } from "../shared/digreg";
 import { getDiscordUserData } from "../shared/discord";
 import { digreg, discord, requireLogin } from "../middleware";
@@ -9,15 +8,19 @@ const userRouter = express.Router();
 
 userRouter.get("/me", requireLogin, discord, digreg(true), getUserController);
 
-async function getUserController(req: Request, res: Response) {
+async function getUserController(req: Request, res: Response, next: NextFunction) {
     // get user from discord api
     const promises: Promise<any>[] = [getDiscordUserData(req.discordAccessToken)];
     if (req.digregAccessToken)
         promises.push(getDigregUserData(req.digregAccessToken));
 
-    const [discordUser, digregUser] = await Promise.all(promises);
+    try {
+        const [discordUser, digregUser] = await Promise.all(promises);
+        res.json(userTransformer(discordUser, digregUser));
+    } catch (error) {
+        next({ status: 401, message: "Error fetching data from discord or digreg api"});
+    }
 
-    res.json(userTransformer(discordUser, digregUser));
 }
 
 
