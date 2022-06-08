@@ -10,7 +10,7 @@ userRouter.get("/me", requireLogin, digreg(true), getUserController);
 
 async function getUserController(req: Request, res: Response, next: NextFunction) {
     // get user from discord api
-    const promises: Promise<any>[] = [getDiscordUserData()];
+    const promises: Promise<any>[] = [getDiscordUserData(req.discordId)];
     if (req.digregAccessToken)
         promises.push(getDigregUserData(req.digregAccessToken));
 
