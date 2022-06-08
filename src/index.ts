@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import config from './shared/config';
 import swaggerUi from 'swagger-ui-express';

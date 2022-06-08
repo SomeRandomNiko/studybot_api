@@ -2,11 +2,11 @@ import { APIUser } from "discord-api-types/v10";
 import express, { NextFunction, Request, Response } from "express";
 import { getDigregUserData } from "../shared/digreg";
 import { getDiscordUserData } from "../shared/discord";
-import { digreg, discord, requireLogin } from "../middleware";
+import { digreg, requireLogin } from "../middleware";
 
 const userRouter = express.Router();
 
-userRouter.get("/me", requireLogin, discord, digreg(true), getUserController);
+userRouter.get("/me", requireLogin, digreg(true), getUserController);
 
 async function getUserController(req: Request, res: Response, next: NextFunction) {
     // get user from discord api

@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken';
 import config from './shared/config';
 import * as database from './shared/database';
 import { refreshDigregTokens } from './shared/digreg';
-import { refreshDiscordTokens } from './shared/discord';
 
 interface ErrorResponse {
     message: string;
@@ -31,31 +30,6 @@ export function requireLogin(req: Request, res: Response, next: NextFunction) {
         req.discordId = decoded.discordId;
         next();
     });
-}
-
-export async function discord(req: Request, res: Response, next: NextFunction) {
-    if (!req.discordId)
-        return next({ status: 500, message: 'Middleware requireDiscord requires requireLogin before it' });
-
-    const user = await database.getUser(req.discordId);
-    if (!user)
-        return next({ status: 404, message: 'User not found' });
-
-    let accessToken = user.discordAccessToken;
-
-    if (user.discordTokenExpires && user.discordTokenExpires.getTime() < Date.now()) {
-        const newTokens = await refreshDiscordTokens(user);
-        if (!newTokens)
-            return next({ status: 500, message: 'Failed to refresh Discord tokens' });
-
-        await database.setDiscordTokens(user.discordId, newTokens.access_token, newTokens.refresh_token, new Date(Date.now() + newTokens.expires_in * 1000));
-
-        accessToken = newTokens.access_token;
-    }
-
-    req.discordAccessToken = accessToken;
-
-    next();
 }
 
 export function digreg(optional = false) {
